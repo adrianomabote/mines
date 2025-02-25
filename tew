@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack de Mines</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #0073e6;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .button {
+            background-color: #ffaa00;
+            color: black;
+            border: none;
+            padding: 15px 20px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 80%;
+            max-width: 300px;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #ff8800;
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .button.group-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .button.group-button:hover {
+            background-color: #218838;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .cell {
+            width: 60px;
+            height: 60px;
+            background-color: #005bb5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .star {
+            background-color: #ffaa00;
+            color: black;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .message {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: normal;
+            letter-spacing: 1px;
+            margin-top: auto;
+            padding: 10px;
+        }
+
+        .cyber-hacker {
+            font-size: 12px;
+            color: #ffcc00;
+            text-shadow: 0 0 3px #ffcc00, 0 0 6px #ffaa00, 0 0 9px #ff8800;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 3px #ffcc00, 0 0 6px #ffaa00, 0 0 9px #ff8800;
+            }
+            to {
+                text-shadow: 0 0 6px #ffcc00, 0 0 12px #ffaa00, 0 0 18px #ff8800;
+            }
+        }
+
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        #loginMessage {
+            color: #ffcc00;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tela de Login -->
+    <div id="loginTela" class="container">
+        <h2>Login - Hack de Mines</h2>
+        <input type="text" id="username" placeholder="Usuário">
+        <input type="password" id="password" placeholder="Senha">
+        <button class="button" onclick="fazerLogin()">Entrar</button>
+        <p id="loginMessage"></p>
+    </div>
+
+    <!-- Primeira Tela (Hack de Mines) - Inicialmente Oculta -->
+    <div id="primeiraTela" class="container hidden">
+        <h1>Bem-vindo ao Hack de Mines</h1>
+        <button class="button group-button" onclick="entrarGrupo()">Entrar no Grupo</button>
+        <button class="button" onclick="mostrarSegundaTela()">Entrar no Hack de Mines</button>
+    </div>
+
+    <!-- Segunda Tela (Hack de Mines) - Inicialmente Oculta -->
+    <div id="segundaTela" class="container hidden">
+        <h1>Hack de Mines 💣</h1>
+
+        <div class="grid" id="gameGrid"></div>
+
+        <div class="buttons">
+            <button class="button" onclick="window.location.href='https://tracking.olabet.co.mz/C.ashx?btag=a_314b_7c_&affid=309&siteid=314&adid=7&c='">Acessar o Jogo</button>
+            <button id="generateBtn" class="button" onclick="startGeneration()">Gerar Novamente</button>
+        </div>
+
+        <p class="message" id="messageText"></p>
+
+        <p class="footer">Desenvolvido por <span class="cyber-hacker">CYBER HACKER OFFICE</span></p>
+    </div>
+
+    <script>
+        // Função de login
+        function fazerLogin() {
+            const usuario = document.getElementById('username').value;
+            const senha = document.getElementById('password').value;
+            const mensagem = document.getElementById('loginMessage');
+
+            const usuarioCorreto = "admin";
+            const senhaCorreta = "1234";
+
+            if (usuario === usuarioCorreto && senha === senhaCorreta) {
+                document.getElementById('loginTela').classList.add('hidden');
+                document.getElementById('primeiraTela').classList.remove('hidden');
+            } else {
+                mensagem.innerText = "Usuário ou senha incorretos!";
+            }
+        }
+
+        function entrarGrupo() {
+            window.location.href = "https://chat.whatsapp.com/Fxk68IypiVl1fjw7KkUIE6";
+        }
+
+        function mostrarSegundaTela() {
+            document.getElementById("primeiraTela").classList.add("hidden");
+            document.getElementById("segundaTela").classList.remove("hidden");
+            createGrid();
+        }
+
+        const gridSize = 5;
+        const totalCells = gridSize * gridSize;
+        const gameGrid = document.getElementById("gameGrid");
+        const generateBtn = document.getElementById("generateBtn");
+        const messageText = document.getElementById("messageText");
+        let cells = [];
+        let countdownInterval;
+
+        function createGrid() {
+            gameGrid.innerHTML = "";
+            cells = [];
+
+            for (let i = 0; i < totalCells; i++) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                gameGrid.appendChild(cell);
+                cells.push(cell);
+            }
+        }
+
+        function showStars() {
+            cells.forEach(cell => {
+                cell.classList.remove("star");
+                cell.innerText = "";
+            });
+
+            let starCount = Math.floor(Math.random() * 4) + 5;
+
+            for (let i = 0; i < starCount; i++) {
+                let pos;
+                do {
+                    pos = Math.floor(Math.random() * totalCells);
+                } while (cells[pos].classList.contains("star"));
+
+                cells[pos].classList.add("star");
+                cells[pos].innerText = "⭐";
+            }
+        }
+
+        function startGeneration() {
+            showStars();
+            disableButtonForSeconds(16);
+        }
+
+        function disableButtonForSeconds(seconds) {
+            generateBtn.disabled = true;
+            let timeLeft = seconds;
+            messageText.innerText = `Aposta válida por ${timeLeft} segundos`;
+
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    messageText.innerText = `Aposta válida por ${timeLeft} segundos`;
+                } else {
+                    clearInterval(countdownInterval);
+                    generateBtn.disabled = false;
+                    messageText.innerText = "";
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
